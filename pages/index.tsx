@@ -19,7 +19,7 @@ export default function Home() {
           rel="stylesheet"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Arial:wght@100;300;400&display=swap" rel="stylesheet"></link>
       </Head>
 
@@ -29,13 +29,4 @@ export default function Home() {
 
     </div>
   )
-}
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  return {
-    props: {
-      session
-    }
-  }
 }
