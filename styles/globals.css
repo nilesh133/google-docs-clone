@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities{
+    .option{
+        @apply cursor-pointer hover:bg-gray-100 transition duration-200 ease-out pt-1 pb-1 pl-2 pr-2 rounded-lg
+    }
+}
