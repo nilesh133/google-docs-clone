@@ -4,7 +4,7 @@ import Modal from "@material-tailwind/react/Modal";
 import ModalBody from "@material-tailwind/react/ModalBody";
 import ModalFooter from "@material-tailwind/react/ModalFooter";
 import Button from "@material-tailwind/react/Button";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { db } from "../firebase";
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
@@ -18,17 +18,22 @@ import Icon from "@material-tailwind/react/Icon"
 function Middle() {
     const router = useRouter();
     const { data: session, status } = useSession();
+    const [allDocs, setAllDocs] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [input, setInput] = useState("");
 
-    const [snapshot] = useCollectionOnce(
+    useEffect(() => {
         db.collection('userDocs')
             .doc(session.user.email)
             .collection('docs')
             .orderBy('timestamp', 'desc')
-    );
-
-    // console.log(snapshot);
+            .onSnapshot((querySnapshot) => {
+                setAllDocs([]);
+                querySnapshot.forEach((doc) => {
+                    setAllDocs((oldDocs) => [...oldDocs, doc]);
+                });
+            })
+    }, [])
 
     const createDocument = () => {
         if (!session) {
@@ -116,7 +121,7 @@ function Middle() {
                 <div className="mx-auto py-8 text-sm text-gray-700 px-0 sm:px-10 md:px-5 xl:px-28">
                     <h2 className="text-black text-base font-arial">Recent documents</h2>
                     <div className="grid place-items-center sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-                        {snapshot?.docs.map((doc) => (
+                        {allDocs?.map((doc) => (
                             <DocumentRow
                                 key={doc.id}
                                 id={doc.id}
